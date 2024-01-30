@@ -1,34 +1,24 @@
 // src/components/Tasks.js
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTasks,updateTask } from '../redux/reducers/tasksSlice';
 
 const Tasks = () => {
-  const [tasks, setTasks] = useState([]);
+  const dispatch = useDispatch();
+  const tasks = useSelector((state) => state.tasks);
 
   useEffect(() => {
-    fetchTasks();
-  }, []);
+    // Buscar tarefas ao montar o componente
+    dispatch(fetchTasks());
+  }, [dispatch]);
 
-  const fetchTasks = async () => {
-    try {
-      const response = await axios.get('/tasks');
-      setTasks(response.data);
-    } catch (error) {
-      console.error('Error fetching tasks:', error);
-    }
-  };
-
-  const handleCompleteClick = async (taskId) => {
-    try {
-      await axios.patch(`/tasks/${taskId}`);
-      fetchTasks();
-    } catch (error) {
-      console.error('Error marking task as completed:', error);
-    }
+  const handleCompleteClick = (taskId) => {
+    // Fazer patch na tarefa ao clicar no botão "Mark as Completed"
+    dispatch(updateTask(taskId));
   };
 
   return (
-    <div className="container mx-10 mt-8">
+    <div className="w-full px-10 mt-8">
       <h2 className="text-2xl font-bold mb-4">Task List</h2>
       <table className="min-w-full border border-gray-200">
         <thead>
@@ -43,15 +33,15 @@ const Tasks = () => {
             <tr key={task.id}>
               <td className="border border-gray-200 px-4 py-2">{task.title}</td>
               <td className="border border-gray-200 px-4 py-2">
-                {task.completed ? (
+                {task.completed_at ? (
                   <span className="text-green-500">Completed</span>
                 ) : (
                   <span className="text-yellow-500">Pending</span>
                 )}
               </td>
               <td className="border border-gray-200 px-4 py-2">
-                {task.completed ? (
-                  <span className="text-green-500">{new Date(task.updated_at).toLocaleString()}</span>
+                {task.completed_at ? (
+                  <span className="text-green-500">{new Date(task.completed_at).toLocaleString()}</span>
                 ) : (
                  <button
                     className="bg-blue-500 text-white px-2 py-1 rounded"

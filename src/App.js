@@ -1,15 +1,23 @@
-// src/App.js
+// App.js
 import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Navbar from './components/Navbar';
 import Tasks from './components/Tasks';
+import Projects from './components/Projects';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <Tasks />
-      </header>
-    </div>
+    <Router>
+      <Navbar />
+      <div className="container mx-auto mt-28">
+        <Routes>
+          <Route path="/" element={<Tasks />} />
+          <Route path="/tasks" element={<Tasks />} />
+          <Route path="/projects" element={<Projects />} />
+        </Routes>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
