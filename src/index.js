@@ -1,20 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './styles/tailwind.css';
-import { Provider } from 'react-redux';
-import store from './redux/store';
 import App from './App';
+import { QueryClient, QueryClientProvider} from 'react-query';
 import reportWebVitals from './reportWebVitals';
 import axios from 'axios';
+
+const queryClient = new QueryClient()
 
 axios.defaults.baseURL = 'https://1b34-45-71-76-107.ngrok-free.app';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
+    <QueryClientProvider client={queryClient}>
       <App />
-    </Provider>
+    </QueryClientProvider>
   </React.StrictMode>
 );
 
