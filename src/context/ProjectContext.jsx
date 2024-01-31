@@ -11,7 +11,7 @@ export const ProjectProvider = ({children}) => {
     {
       retry: 5,
       refetchOnWindowFocus: true,
-      refetchInterval: 30000
+      refetchInterval: 3000
     }
   );
 
