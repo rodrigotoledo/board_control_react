@@ -28,12 +28,28 @@ export const TaskProvider = ({children}) => {
     taskMutation.mutate({taskId: task.id})
   }
 
-
   const completedTaskCount = () => {
     return !isLoading && data.filter((task) => task.completed_at).length;
   };
 
-  return <TaskContext.Provider value={{tasks: data, completeTask: completeTask, isLoadingTasks: isLoading, completedTaskCount: completedTaskCount }}>{children}</TaskContext.Provider>
+  const getCompletionColor = () => {
+    if (isLoading) {
+      return 'gray'; 
+    }
+
+    const count = completedTaskCount();
+    const completionPercentage = (count / data.length) * 100;
+
+    if (completionPercentage < 30) {
+      return 'red';
+    } else if (completionPercentage < 60) {
+      return 'orange';
+    } else {
+      return 'green';
+    }
+  };
+
+  return <TaskContext.Provider value={{tasks: data, completeTask: completeTask, isLoadingTasks: isLoading, completedTaskCount: completedTaskCount, tasksColor: getCompletionColor }}>{children}</TaskContext.Provider>
 }
 
 export const useTaskContext = () => {

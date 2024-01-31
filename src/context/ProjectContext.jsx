@@ -32,7 +32,25 @@ export const ProjectProvider = ({children}) => {
     return !isLoading && data.filter((project) => project.completed_at).length;
   };
 
-  return <ProjectContext.Provider value={{projects: data, completeProject: completeProject, isLoadingProjects: isLoading, completedProjectCount: completedProjectCount }}>{children}</ProjectContext.Provider>
+  const getCompletionColor = () => {
+    if (isLoading) {
+      return 'gray'; 
+    }
+
+    const count = completedProjectCount();
+    const completionPercentage = (count / data.length) * 100;
+
+    if (completionPercentage < 30) {
+      return 'red';
+    } else if (completionPercentage < 60) {
+      return 'orange';
+    } else {
+      return 'green';
+    }
+  };
+
+
+  return <ProjectContext.Provider value={{projects: data, completeProject: completeProject, isLoadingProjects: isLoading, completedProjectCount: completedProjectCount, projectsColor: getCompletionColor }}>{children}</ProjectContext.Provider>
 }
 
 export const useProjectContext = () => {
