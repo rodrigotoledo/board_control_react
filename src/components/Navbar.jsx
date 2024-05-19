@@ -1,7 +1,7 @@
 // Navbar.js
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { FaBriefcase, FaTasks, FaCheckDouble } from 'react-icons/fa';
-import { Link } from 'react-router-dom'; // Se estiver usando react-router
+import { Link, useNavigate } from 'react-router-dom'; // Se estiver usando react-router
 import { useTaskContext } from '../context/TaskContext';
 import { useProjectContext } from '../context/ProjectContext';
 
@@ -25,12 +25,15 @@ const Navbar = () => {
           <Link to="/tasks" className="flex items-center space-x-2">
             <FaTasks className="mr-2" />
             Tasks
-            <span className={`rounded-full bg-${tasksColorTheme}-500 text-white w-8 h-8 font-bold items-center justify-center flex`}>{countCompletedTask}</span>
+            <span className={`rounded-full bg-${tasksColorTheme}-700 text-white w-8 h-8 font-bold items-center justify-center flex`}>{countCompletedTask}</span>
           </Link>
           <Link to="/projects" className="flex items-center space-x-2">
             <FaBriefcase className="mr-2" />
             Projects
-            <span className={`rounded-full bg-${projectsColorTheme}-500 text-white w-8 h-8 font-bold text-center items-center justify-center flex`}>{countCompletedProject}</span>
+            <span className={`rounded-full bg-${projectsColorTheme}-700 text-white w-8 h-8 font-bold text-center items-center justify-center flex`}>{countCompletedProject}</span>
+          </Link>
+          <Link to="/sign-out" className="flex items-center space-x-2">
+            Logout
           </Link>
         </div>
       </div>

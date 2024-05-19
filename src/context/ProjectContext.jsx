@@ -1,12 +1,12 @@
 import React, { createContext, useContext } from 'react';
 import { useQuery, useMutation } from 'react-query';
-import axios from 'axios';
+import axios from '../axiosConfig';
 
 const ProjectContext = createContext();
 
 export const ProjectProvider = ({children}) => {
   const { data, isLoading, error, refetch } = useQuery("projects", () => {
-      return axios.get('/projects').then((response) => response.data);
+      return axios.get('/api/projects').then((response) => response.data);
     },
     {
       retry: 5,
@@ -16,10 +16,11 @@ export const ProjectProvider = ({children}) => {
 
   const projectMutation = useMutation({
     mutationFn: ({projectId}) => {
-      return axios.patch(`/projects/${projectId}`).then((response) => response.data);
+      return axios.patch(`/api/projects/${projectId}`).then((response) => response.data);
     },
     onSuccess: (data) => {
       refetch()
+      getCompletionColor()
     }
   })
 
@@ -28,7 +29,7 @@ export const ProjectProvider = ({children}) => {
   }
 
   const completedProjectCount = () => {
-    return !isLoading && data.filter((project) => project.completed_at).length;
+    return !isLoading && data && data.filter((project) => project.completed_at).length;
   };
 
   const getCompletionColor = () => {
@@ -49,7 +50,7 @@ export const ProjectProvider = ({children}) => {
   };
 
 
-  return <ProjectContext.Provider value={{projects: data, completeProject: completeProject, isLoadingProjects: isLoading, completedProjectCount: completedProjectCount, projectsColor: getCompletionColor }}>{children}</ProjectContext.Provider>
+  return <ProjectContext.Provider value={{projects: data ?? [], completeProject: completeProject, isLoadingProjects: isLoading, completedProjectCount: completedProjectCount, projectsColor: getCompletionColor }}>{children}</ProjectContext.Provider>
 }
 
 export const useProjectContext = () => {

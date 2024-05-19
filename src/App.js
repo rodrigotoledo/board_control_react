@@ -1,28 +1,34 @@
-// App.js
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Tasks from './components/Tasks';
-import Projects from './components/Projects';
-import { TaskProvider } from './context/TaskContext';
-import { ProjectProvider } from './context/ProjectContext';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import AuthenticatedStack from './authentication/AuthenticatedStack';
+import UnauthenticatedStack from './authentication/UnauthenticatedStack';
+
 
 const App = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const authToken = localStorage.getItem('authToken');
+        setIsAuthenticated(!!authToken);
+      } catch (error) {
+        console.log('Error:', error);
+        setIsAuthenticated(false);
+      }
+    };
+
+    checkAuthentication();
+  }, []);
+
+  if (isAuthenticated === null) {
+    return null;
+  }
+
   return (
-    <TaskProvider>
-      <ProjectProvider>
-        <Router>
-          <Navbar />
-          <div className="container mx-auto mt-28">
-            <Routes>
-              <Route path="/" element={<Tasks />} />
-              <Route path="/tasks" element={<Tasks />} />
-              <Route path="/projects" element={<Projects />} />
-            </Routes>
-          </div>
-        </Router>
-      </ProjectProvider>
-    </TaskProvider>
+    <Router>
+      {isAuthenticated ? <AuthenticatedStack setIsAuthenticated={setIsAuthenticated} /> : <UnauthenticatedStack setIsAuthenticated={setIsAuthenticated} />}
+    </Router>
   );
 };
 
