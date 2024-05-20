@@ -1,12 +1,12 @@
 import React, { createContext, useContext } from 'react';
 import { useQuery, useMutation } from 'react-query';
-import axios from 'axios';
+import axios from '../axiosConfig';
 
 const TaskContext = createContext();
 
 export const TaskProvider = ({children}) => {
   const { data, isLoading, error, refetch } = useQuery("tasks", () => {
-      return axios.get('/tasks').then((response) => response.data);
+      return axios.get('/api/tasks').then((response) => response.data);
     },
     {
       retry: 5,
@@ -16,7 +16,7 @@ export const TaskProvider = ({children}) => {
 
   const taskMutation = useMutation({
     mutationFn: ({taskId}) => {
-      return axios.patch(`/tasks/${taskId}`).then((response) => response.data);
+      return axios.patch(`/api/tasks/${taskId}`).then((response) => response.data);
     },
     onSuccess: (data) => {
       refetch()
@@ -28,27 +28,26 @@ export const TaskProvider = ({children}) => {
   }
 
   const completedTaskCount = () => {
-    return !isLoading && data.filter((task) => task.completed_at).length;
+    return !isLoading && data && data.filter((task) => task.completed_at).length;
   };
 
   const getCompletionColor = () => {
     if (isLoading) {
-      return 'gray'; 
+      return 'bg-gray-400'; 
     }
 
-    const count = completedTaskCount();
-    const completionPercentage = (count / data.length) * 100;
+    const completionPercentage = (completedTaskCount() / data.length) * 100;
 
     if (completionPercentage < 30) {
-      return 'red';
+      return 'bg-red-400';
     } else if (completionPercentage < 60) {
-      return 'orange';
+      return 'bg-orange-400';
     } else {
-      return 'green';
+      return 'bg-green-400';
     }
   };
 
-  return <TaskContext.Provider value={{tasks: data, completeTask: completeTask, isLoadingTasks: isLoading, completedTaskCount: completedTaskCount, tasksColor: getCompletionColor }}>{children}</TaskContext.Provider>
+  return <TaskContext.Provider value={{tasks: data ?? [], completeTask: completeTask, isLoadingTasks: isLoading, completedTaskCount: completedTaskCount(), tasksColor: getCompletionColor() }}>{children}</TaskContext.Provider>
 }
 
 export const useTaskContext = () => {
