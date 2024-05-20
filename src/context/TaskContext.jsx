@@ -33,21 +33,21 @@ export const TaskProvider = ({children}) => {
 
   const getCompletionColor = () => {
     if (isLoading) {
-      return 'gray'; 
+      return 'bg-gray-400'; 
     }
 
     const completionPercentage = (completedTaskCount() / data.length) * 100;
 
     if (completionPercentage < 30) {
-      return 'red';
+      return 'bg-red-400';
     } else if (completionPercentage < 60) {
-      return 'orange';
+      return 'bg-orange-400';
     } else {
-      return 'green';
+      return 'bg-green-400';
     }
   };
 
-  return <TaskContext.Provider value={{tasks: data ?? [], completeTask: completeTask, isLoadingTasks: isLoading, completedTaskCount: completedTaskCount, tasksColor: getCompletionColor }}>{children}</TaskContext.Provider>
+  return <TaskContext.Provider value={{tasks: data ?? [], completeTask: completeTask, isLoadingTasks: isLoading, completedTaskCount: completedTaskCount(), tasksColor: getCompletionColor() }}>{children}</TaskContext.Provider>
 }
 
 export const useTaskContext = () => {

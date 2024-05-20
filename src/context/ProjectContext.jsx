@@ -20,7 +20,6 @@ export const ProjectProvider = ({children}) => {
     },
     onSuccess: (data) => {
       refetch()
-      getCompletionColor()
     }
   })
 
@@ -34,23 +33,23 @@ export const ProjectProvider = ({children}) => {
 
   const getCompletionColor = () => {
     if (isLoading) {
-      return 'gray'; 
+      return 'bg-gray-400'; 
     }
 
     const count = completedProjectCount();
     const completionPercentage = (count / data.length) * 100;
 
     if (completionPercentage < 30) {
-      return 'red';
+      return 'bg-red-400';
     } else if (completionPercentage < 60) {
-      return 'orange';
+      return 'bg-orange-400';
     } else {
-      return 'green';
+      return 'bg-green-400';
     }
   };
 
 
-  return <ProjectContext.Provider value={{projects: data ?? [], completeProject: completeProject, isLoadingProjects: isLoading, completedProjectCount: completedProjectCount, projectsColor: getCompletionColor }}>{children}</ProjectContext.Provider>
+  return <ProjectContext.Provider value={{projects: data ?? [], completeProject: completeProject, isLoadingProjects: isLoading, completedProjectCount: completedProjectCount(), projectsColor: getCompletionColor() }}>{children}</ProjectContext.Provider>
 }
 
 export const useProjectContext = () => {
