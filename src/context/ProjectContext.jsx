@@ -1,18 +1,19 @@
 import React, { createContext, useContext } from 'react';
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import axios from '../axiosConfig';
 
 const ProjectContext = createContext();
 
+function fetchProjectList(){
+  return axios.get('/api/projects').then((response) => response.data);
+}
+
 export const ProjectProvider = ({children}) => {
-  const { data, isLoading, error, refetch } = useQuery("projects", () => {
-      return axios.get('/api/projects').then((response) => response.data);
-    },
-    {
-      retry: 5,
-      refetchOnWindowFocus: true
+  const { isPending, isLoading, isError, data, error, refetch, refetchOnWindowFocus } = useQuery({
+      queryKey: ['projects'],
+      queryFn: fetchProjectList,
     }
-  );
+  )
 
   const projectMutation = useMutation({
     mutationFn: ({projectId}) => {

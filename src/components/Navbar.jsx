@@ -23,7 +23,6 @@ const Navbar = () => {
       setProjectsColorTheme(projectsColor);
       setProjectsCount(completedProjectCount);
     }
-    console.log(projectsColor)
   }, [tasks, projects]);
 
   return (

@@ -1,18 +1,19 @@
 import React, { createContext, useContext } from 'react';
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import axios from '../axiosConfig';
 
 const TaskContext = createContext();
 
+function fetchTaskList(){
+  return axios.get('/api/tasks').then((response) => response.data);
+}
+
 export const TaskProvider = ({children}) => {
-  const { data, isLoading, error, refetch } = useQuery("tasks", () => {
-      return axios.get('/api/tasks').then((response) => response.data);
-    },
-    {
-      retry: 5,
-      refetchOnWindowFocus: true
+  const { isPending, isLoading, isError, data, error, refetch, refetchOnWindowFocus } = useQuery({
+      queryKey: ['tasks'],
+      queryFn: fetchTaskList,
     }
-  );
+  )
 
   const taskMutation = useMutation({
     mutationFn: ({taskId}) => {
