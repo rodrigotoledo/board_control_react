@@ -21,7 +21,7 @@ const SignUp = ({ setIsAuthenticated }) => {
       if (error.response && error.response.data && error.response.data.errors) {
         setErrors(error.response.data.errors);
       } else {
-        setErrors(['An error occurred. Please try again.']);
+        setErrors(['An error occurred. Please try again.'+error.message]);
       }
     }
   };

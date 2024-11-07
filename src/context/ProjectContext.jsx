@@ -9,9 +9,11 @@ function fetchProjectList(){
 }
 
 export const ProjectProvider = ({children}) => {
-  const { isPending, isLoading, isError, data, error, refetch, refetchOnWindowFocus } = useQuery({
+  const { isPending, isLoading, isError, data, error, refetch } = useQuery({
       queryKey: ['projects'],
       queryFn: fetchProjectList,
+      refetchOnWindowFocus: "always",
+      refetchInterval: 5000
     }
   )
 

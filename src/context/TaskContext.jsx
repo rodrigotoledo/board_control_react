@@ -9,9 +9,11 @@ function fetchTaskList(){
 }
 
 export const TaskProvider = ({children}) => {
-  const { isPending, isLoading, isError, data, error, refetch, refetchOnWindowFocus } = useQuery({
+  const { isPending, isLoading, isError, data, error, refetch } = useQuery({
       queryKey: ['tasks'],
       queryFn: fetchTaskList,
+      refetchOnWindowFocus: "always",
+      refetchInterval: 5000
     }
   )
 
