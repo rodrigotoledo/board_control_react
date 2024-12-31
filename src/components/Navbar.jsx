@@ -7,8 +7,8 @@ import { useProjectContext } from '../context/ProjectContext';
 
 
 const Navbar = () => {
-  const { tasks, completedTaskCount, tasksColor, isLoadingTasks } = useTaskContext();
-  const { projects, completedProjectCount, projectsColor, isLoadingProjects } = useProjectContext();
+  const { tasks, completedTaskCount, tasksColor } = useTaskContext();
+  const { projects, completedProjectCount, projectsColor } = useProjectContext();
   let [ tasksColorTheme, setTasksColorTheme ] = useState('bg-gray-400')
   let [ tasksCount, setTasksCount ] = useState(null)
 
@@ -23,7 +23,7 @@ const Navbar = () => {
       setProjectsColorTheme(projectsColor);
       setProjectsCount(completedProjectCount);
     }
-  }, [tasks, projects]);
+  }, [tasks, projects, completedTaskCount, completedProjectCount, projectsColor, tasksColor]);
 
   return (
     <nav className="bg-gray-800 p-4 text-white fixed w-full top-0">

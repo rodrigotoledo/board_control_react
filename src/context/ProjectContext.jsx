@@ -9,7 +9,7 @@ function fetchProjectList(){
 }
 
 export const ProjectProvider = ({children}) => {
-  const { isPending, isLoading, isError, data, error, refetch } = useQuery({
+  const { isLoading, data, refetch } = useQuery({
       queryKey: ['projects'],
       queryFn: fetchProjectList,
       refetchOnWindowFocus: "always",
@@ -39,8 +39,7 @@ export const ProjectProvider = ({children}) => {
       return 'bg-gray-400'; 
     }
 
-    const count = completedProjectCount();
-    const completionPercentage = (count / data.length) * 100;
+    const completionPercentage = (completedProjectCount() / data.length) * 100;
 
     if (completionPercentage < 30) {
       return 'bg-red-400';
