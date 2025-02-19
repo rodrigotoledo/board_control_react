@@ -5,10 +5,12 @@ import './index.css';
 import {
   QueryClient,
   QueryClientProvider,
-} from '@tanstack/react-query'
-const queryClient = new QueryClient()
+} from '@tanstack/react-query';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const queryClient = new QueryClient();
+
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>

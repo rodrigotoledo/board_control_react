@@ -3,9 +3,8 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import AuthenticatedStack from './authentication/AuthenticatedStack';
 import UnauthenticatedStack from './authentication/UnauthenticatedStack';
 
-
-const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
+const App: React.FC = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
     const checkAuthentication = async () => {
