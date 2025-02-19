@@ -1,7 +1,6 @@
-// src/components/Header.jsx
 import React from 'react';
 
-const Header = () => {
+const Header: React.FC = () => {
   const APPLICATION_NAME = process.env.REACT_APP_APPLICATION_NAME || "Board Control";
 
   return (
