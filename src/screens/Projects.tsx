@@ -1,10 +1,15 @@
-// src/components/Projects.js
 import React from 'react';
 import { useProjectContext } from '../context/ProjectContext';
 
-const Projects = () => {
+interface Project {
+  id: number;
+  name: string;
+  completed_at?: string | null;
+}
+
+const Projects: React.FC = () => {
   const { projects, completeProject, isLoadingProjects } = useProjectContext();
-  
+
   return (
     <div className="w-full px-10 mt-8">
       <h2 className="text-2xl font-bold mb-4">Project List</h2>
@@ -17,7 +22,7 @@ const Projects = () => {
           </tr>
         </thead>
         <tbody>
-          {!isLoadingProjects && projects.map((project) => (
+          {!isLoadingProjects && projects.map((project: Project) => (
             <tr key={project.id}>
               <td className="border border-gray-200 px-4 py-2">{project.name}</td>
               <td className="border border-gray-200 px-4 py-2">
