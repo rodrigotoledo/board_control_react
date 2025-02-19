@@ -1,10 +1,14 @@
-// src/UnauthenticatedStack.js
+// src/UnauthenticatedStack.tsx
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import SignIn from '../screens/SignIn';
 import SignUp from '../screens/SignUp';
 
-const UnauthenticatedStack = ({ setIsAuthenticated }) => (
+interface UnauthenticatedStackProps {
+  setIsAuthenticated: (isAuth: boolean) => void;
+}
+
+const UnauthenticatedStack: React.FC<UnauthenticatedStackProps> = ({ setIsAuthenticated }) => (
   <div className="min-h-screen flex items-center justify-center bg-gray-100">
     <Routes>
       <Route path="/" element={<SignIn setIsAuthenticated={setIsAuthenticated} />} />
