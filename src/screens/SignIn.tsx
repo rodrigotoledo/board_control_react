@@ -1,17 +1,20 @@
-// src/screens/SignIn.js
 import React, { useState } from 'react';
 import axios from '../axiosConfig';
 import Header from '../components/Header';
 import { Link } from 'react-router-dom';
 
-const SignIn = ({ setIsAuthenticated }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+interface SignInProps {
+  setIsAuthenticated: (isAuth: boolean) => void;
+}
 
-  const handleSubmit = async (e) => {
+const SignIn: React.FC<SignInProps> = ({ setIsAuthenticated }) => {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/sign_in', { email, password });
+      const response = await axios.post<{ token: string }>('/api/sign_in', { email, password });
       localStorage.setItem('authToken', response.data.token);
       setIsAuthenticated(true);
     } catch (error) {
@@ -58,7 +61,6 @@ const SignIn = ({ setIsAuthenticated }) => {
             >
               Sign In
             </button>
-
             <Link to="/sign-up" className="bg-gray-700 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
               Sign Up
             </Link>

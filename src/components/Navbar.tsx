@@ -1,30 +1,31 @@
-// Navbar.js
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaBriefcase, FaTasks, FaCheckDouble } from 'react-icons/fa';
 import { Link } from 'react-router-dom'; // Se estiver usando react-router
 import { useTaskContext } from '../context/TaskContext';
 import { useProjectContext } from '../context/ProjectContext';
 
+interface NavbarProps {}
 
-const Navbar = () => {
-  const { tasks, completedTaskCount, tasksColor, isLoadingTasks } = useTaskContext();
-  const { projects, completedProjectCount, projectsColor, isLoadingProjects } = useProjectContext();
-  let [ tasksColorTheme, setTasksColorTheme ] = useState('bg-gray-400')
-  let [ tasksCount, setTasksCount ] = useState(null)
+const Navbar: React.FC<NavbarProps> = () => {
+  const { tasks, completedTaskCount, tasksColor } = useTaskContext();
+  const { projects, completedProjectCount, projectsColor } = useProjectContext();
 
-  let [ projectsColorTheme, setProjectsColorTheme ] = useState('bg-gray-400')
-  let [ projectsCount, setProjectsCount ] = useState(null)
+  const [tasksColorTheme, setTasksColorTheme] = useState<string>('bg-gray-400');
+  const [tasksCount, setTasksCount] = useState<number | null>(null);
+
+  const [projectsColorTheme, setProjectsColorTheme] = useState<string>('bg-gray-400');
+  const [projectsCount, setProjectsCount] = useState<number | null>(null);
+
   useEffect(() => {
-    if(tasks !== undefined){
+    if (tasks !== undefined) {
       setTasksColorTheme(tasksColor);
       setTasksCount(completedTaskCount);
     }
-    if(projects !== undefined){
+    if (projects !== undefined) {
       setProjectsColorTheme(projectsColor);
       setProjectsCount(completedProjectCount);
     }
-    console.log(projectsColor)
-  }, [tasks, projects]);
+  }, [tasks, projects, completedTaskCount, completedProjectCount, projectsColor, tasksColor]);
 
   return (
     <nav className="bg-gray-800 p-4 text-white fixed w-full top-0">

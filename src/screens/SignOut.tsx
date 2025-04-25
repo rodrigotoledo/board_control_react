@@ -1,18 +1,16 @@
-// src/screens/SignOut.js
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const SignOut = ({ setIsAuthenticated }) => {
+interface SignOutProps {
+  setIsAuthenticated: (isAuthenticated: boolean) => void;
+}
+
+const SignOut: React.FC<SignOutProps> = ({ setIsAuthenticated }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Remover o token de autenticação do localStorage
     localStorage.removeItem('authToken');
-
-    // Atualizar o estado de autenticação
     setIsAuthenticated(false);
-
-    // Redirecionar para a página de login
     navigate('/');
   }, [navigate, setIsAuthenticated]);
 

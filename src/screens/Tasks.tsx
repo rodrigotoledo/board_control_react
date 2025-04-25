@@ -1,10 +1,10 @@
-// src/components/Tasks.js
+// src/components/Tasks.tsx
 import React from 'react';
 import { useTaskContext } from '../context/TaskContext';
 
-const Tasks = () => {
+const Tasks: React.FC = () => {
   const { tasks, completeTask, isLoadingTasks } = useTaskContext();
-  
+
   return (
     <div className="w-full px-10 mt-8">
       <h2 className="text-2xl font-bold mb-4">Task List</h2>

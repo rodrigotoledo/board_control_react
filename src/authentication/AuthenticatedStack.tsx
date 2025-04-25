@@ -7,7 +7,11 @@ import { TaskProvider } from '../context/TaskContext';
 import { ProjectProvider } from '../context/ProjectContext';
 import SignOut from '../screens/SignOut';
 
-const AuthenticatedStack = ({ setIsAuthenticated }) => (
+interface AuthenticatedStackProps {
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean | null>>;
+}
+
+const AuthenticatedStack: React.FC<AuthenticatedStackProps> = ({ setIsAuthenticated }) => (
   <TaskProvider>
     <ProjectProvider>
       <Navbar />
@@ -19,7 +23,7 @@ const AuthenticatedStack = ({ setIsAuthenticated }) => (
           <Route path="/sign-out" element={<SignOut setIsAuthenticated={setIsAuthenticated} />} />
         </Routes>
       </div>
-      </ProjectProvider>
+    </ProjectProvider>
   </TaskProvider>
 );
 
