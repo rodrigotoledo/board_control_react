@@ -111,16 +111,14 @@ const Projects = () => {
         const completedAt = info.getValue();
         return completedAt ? (
           <span className="text-green-500 whitespace-normal">
-            <span className="hidden md:inline">Completed at </span>
             {new Date(completedAt).toLocaleString('pt-BR')}
           </span>
         ) : (
           <button
-            className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs md:text-sm md:px-3"
+            className="bg-slate-500 hover:bg-slate-600 text-white py-1 rounded text-xs px-3"
             onClick={() => completeProject(info.row.original)}
           >
-            <span className="md:hidden">✓</span>
-            <span className="hidden md:inline">Mark as completed</span>
+            <span className="">Mark as completed</span>
           </button>
         );
       },
