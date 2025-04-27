@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Header: React.FC = () => {
+const Header = () => {
   const APPLICATION_NAME = process.env.REACT_APP_APPLICATION_NAME || "Board Control";
 
   return (
