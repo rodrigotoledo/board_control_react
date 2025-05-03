@@ -3,26 +3,28 @@ import axios from '../axiosConfig';
 import Header from '../components/Header';
 import { Link, useNavigate } from 'react-router-dom';
 
-interface SignUpProps {
-  setIsAuthenticated: (isAuthenticated: boolean) => void;
-}
-
-const SignUp: React.FC<SignUpProps> = ({ setIsAuthenticated }) => {
+const SignUp = ({ setIsAuthenticated }) => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [passwordConfirmation, setPasswordConfirmation] = useState<string>('');
-  const [errors, setErrors] = useState<string[]>([]);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const [errors, setErrors] = useState([]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/sign_up', { user: { email, password, password_confirmation: passwordConfirmation } });
+      const response = await axios.post('/api/sign_up', { 
+        user: { 
+          email, 
+          password, 
+          password_confirmation: passwordConfirmation 
+        } 
+      });
       localStorage.setItem('authToken', response.data.token);
       setIsAuthenticated(true);
       navigate('/tasks');
-    } catch (error: any) {
-      if (error.response && error.response.data && error.response.data.errors) {
+    } catch (error) {
+      if (error.response?.data?.errors) {
         setErrors(error.response.data.errors);
       } else {
         setErrors([`An error occurred. Please try again. ${error.message}`]);
