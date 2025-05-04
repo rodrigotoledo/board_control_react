@@ -59,7 +59,7 @@ const SignUp = ({ setIsAuthenticated }) => {
             id="outlined-basic" label="Password" variant="outlined" required={true} type='password' value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} />
           <div className="flex items-center space-x-2">
             <Button
-              href='/submit'
+              type='submit'
               variant="contained"
               color="success"
               startIcon={<PersonAddIcon />}

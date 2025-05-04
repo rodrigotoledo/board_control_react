@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react';
 
 import { FaTasks } from 'react-icons/fa';
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, Alert, Snackbar } from '@mui/material';
 import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table';
 import Calendar from 'react-calendar';
 import { usePaginatedTasks } from '../hooks/usePaginatedTasks';
@@ -10,7 +10,6 @@ import { CompletedAtStatus, DateTimeFormat} from '../components/DateTimeUtils';
 
 const Tasks = () => {
 
-  const [currentDateRange, setCurrentDateRange] = useState([new Date()]);
   const [isSearching, setIsSearching] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortConfig, setSortConfig] = useState({
@@ -19,6 +18,19 @@ const Tasks = () => {
   });
   const [page, setPage] = useState(1);
   const searchInputRef = useRef(null);
+  
+  
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [openAlert, setOpenAlert] = useState(false);
+
+  const handleDayClick = (date) => {
+    setSelectedDate(date);
+    setOpenAlert(true);
+  };
+
+  const handleCloseAlert = () => {
+    setOpenAlert(false);
+  };
 
   const handleSearchChange = (e) => {
     setIsSearching(true);
@@ -35,7 +47,8 @@ const Tasks = () => {
     page,
     sortConfig.field,
     sortConfig.direction,
-    searchTerm
+    searchTerm,
+    selectedDate
   );
 
   const { mutate: completeTask, isLoading: isCompleting } = useCompleteTask();
@@ -156,9 +169,13 @@ const Tasks = () => {
               Create Task
             </Button>
           </div>
-          <h1 className='text-2xl'>Your can filter by Date Range</h1>
+          <h1 className='text-2xl'>Your can filter by Date</h1>
           <div className="bg-gray-200 w-auto flex items-center justify-center rounded-md my-2 p-2">
-            <Calendar onChange={setCurrentDateRange} value={currentDateRange} locale='en' />
+            <Calendar
+              onChange={setSelectedDate}
+              onClickDay={handleDayClick}
+              value={selectedDate}
+              locale='en' />
           </div>
         </div>
         <div className='xl:w-4/5 md:w-2/3 lg:w-3/5 w-full'>
@@ -226,7 +243,22 @@ const Tasks = () => {
           )}
         </div>
       </div>
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={3000}
+        onClose={handleCloseAlert}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert 
+          onClose={handleCloseAlert} 
+          severity="info"
+          sx={{ width: '100%' }}
+        >
+          Você selecionou o dia: {selectedDate?.toLocaleDateString('en')}
+        </Alert>
+      </Snackbar>
     </div>
+    
   );
 };
 
