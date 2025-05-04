@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import axios from '../axiosConfig';
 import Header from '../components/Header';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Button, TextField } from '@mui/material';
+import LoginIcon from '@mui/icons-material/Login';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 const SignUp = ({ setIsAuthenticated }) => {
   const navigate = useNavigate();
@@ -44,56 +47,57 @@ const SignUp = ({ setIsAuthenticated }) => {
             ))}
           </ul>
         )}
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring"
-              required
-            />
-          </div>
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring"
-              required
-            />
-          </div>
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="passwordConfirmation">
-              Password Confirmation
-            </label>
-            <input
-              type="password"
-              id="passwordConfirmation"
-              value={passwordConfirmation}
-              onChange={(e) => setPasswordConfirmation(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring"
-              required
-            />
-          </div>
+        <form onSubmit={handleSubmit} className='flex flex-col space-y-4'>
+          <TextField
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring"
+            id="outlined-basic" label="Email" variant="outlined" required={true} type='email' value={email} onChange={(e) => setEmail(e.target.value)} />
+          <TextField
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring"
+            id="outlined-basic" label="Password" variant="outlined" required={true} type='password' value={password} onChange={(e) => setPassword(e.target.value)} />
+          <TextField
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring"
+            id="outlined-basic" label="Password" variant="outlined" required={true} type='password' value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} />
           <div className="flex items-center space-x-2">
-            <button
-              type="submit"
-              className="bg-gray-700 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            <Button
+              href='/submit'
+              variant="contained"
+              color="success"
+              startIcon={<PersonAddIcon />}
+              sx={{
+                background: '#065f46',
+                textTransform: 'none',
+                borderRadius: '8px',
+                padding: '8px 20px',
+                fontWeight: 500,
+                boxShadow: 'none',
+                '&:hover': {
+                  boxShadow: 'none',
+                  backgroundColor: '#064e3b'
+                }
+              }}
             >
               Sign Up
-            </button>
-            <Link to="/" className="bg-gray-700 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            </Button>
+            <Button
+              href='/'
+              variant="contained"
+              color="primary"
+              startIcon={<LoginIcon />}
+              sx={{
+                textTransform: 'none',
+                borderRadius: '8px',
+                padding: '8px 20px',
+                fontWeight: 500,
+                background: '#4b5563',
+                boxShadow: 'none',
+                '&:hover': {
+                  boxShadow: 'none',
+                  backgroundColor: '#111827'
+                }
+              }}
+            >
               Sign In
-            </Link>
+            </Button>
           </div>
         </form>
       </div>

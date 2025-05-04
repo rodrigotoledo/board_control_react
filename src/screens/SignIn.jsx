@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import axios from '../axiosConfig';
 import Header from '../components/Header';
 import { Button, TextField } from '@mui/material';
+import LoginIcon from '@mui/icons-material/Login';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 const SignIn = ({ setIsAuthenticated }) => {
   const [email, setEmail] = useState('example@example.com');
@@ -31,8 +33,46 @@ const SignIn = ({ setIsAuthenticated }) => {
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring"
             id="outlined-basic" label="Password" variant="outlined" required={true} type='password' value={password} onChange={(e) => setPassword(e.target.value)} />
           <div className="flex items-center space-x-2">
-            <Button variant="contained" type='submit' className='bg-gray-700 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'>Sign In</Button>
-            <Button href='/sign-up' variant="contained" type='submit' className='bg-gray-700 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'>Sign Up</Button>
+            <Button
+              type='submit'
+              variant="contained"
+              color="primary"
+              startIcon={<LoginIcon />}
+              sx={{
+                textTransform: 'none',
+                borderRadius: '8px',
+                padding: '8px 20px',
+                fontWeight: 500,
+                background: '#4b5563',
+                boxShadow: 'none',
+                '&:hover': {
+                  boxShadow: 'none',
+                  backgroundColor: '#111827'
+                }
+              }}
+            >
+              Sign In
+            </Button>
+            <Button
+              href='/sign-up'
+              variant="contained"
+              color="success"
+              startIcon={<PersonAddIcon />}
+              sx={{
+                background: '#065f46',
+                textTransform: 'none',
+                borderRadius: '8px',
+                padding: '8px 20px',
+                fontWeight: 500,
+                boxShadow: 'none',
+                '&:hover': {
+                  boxShadow: 'none',
+                  backgroundColor: '#064e3b'
+                }
+              }}
+            >
+              Sign Up
+            </Button>
           </div>
         </form>
       </div>

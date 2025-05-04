@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useTasksStats } from '../hooks/useTasksStats';
 import { useProjectsStats } from '../hooks/useProjectsStats';
 import ProgressBadge from './ProgressBadge';
+import Button from '@mui/material/Button';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const Navbar = () => {
   const { data: tasksStats } = useTasksStats();
@@ -32,9 +34,28 @@ const Navbar = () => {
               completed={projectsStats?.completed_count || 0} 
             />
           </Link>
-          <Link to="/sign-out" className="flex items-center space-x-2">
+          <Button
+            href='/sign-out'
+            variant="outlined"
+            startIcon={<LogoutIcon />}
+            sx={{
+              color: '#fff',
+              borderColor: '#fff',
+              background: '#4b5563',
+              textTransform: 'none',
+              borderRadius: '8px',
+              padding: '1rem',
+              height: '3rem',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 500,
+              '&:hover': {
+                backgroundColor: '#374151' // hover suave para botão outlined
+              }
+            }}
+          >
             Logout
-          </Link>
+          </Button>
         </div>
       </div>
     </nav>

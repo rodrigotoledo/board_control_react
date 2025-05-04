@@ -9,6 +9,7 @@ import { useCompleteTask } from '../hooks/useCompleteTask';
 import { CompletedAtStatus, DateTimeFormat} from '../components/DateTimeUtils';
 
 const Tasks = () => {
+
   const [currentDateRange, setCurrentDateRange] = useState([new Date()]);
   const [isSearching, setIsSearching] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -134,20 +135,33 @@ const Tasks = () => {
   return (
     <div className="w-full px-10 mt-8 space-y-4">
       <h2 className="text-2xl font-bold">Tasks List</h2>
-      <div className='w-full flex flex-col lg:flex-row lg:space-x-4'>
-        <div className='lg:w-2/5 w-full flex flex-col space-y-2'>
-          <div className='flex space-x-2'>
+      <div className="flex flex-col md:flex-row w-full gap-4 lg:space-x-4">
+        <div className='w-full md:w-1/3 lg:w-1/4 flex flex-col space-y-4'>
+          <div className='flex flex-row md:flex-col sm:flex-col xs:flex-col gap-2'>
             <TextField
               inputRef={searchInputRef}
               id="outlined-basic" label="Search for tasks..." variant="outlined" required={true} value={searchTerm} onChange={handleSearchChange} />
-            <Button variant="outlined" startIcon={<FaTasks />}>Create Task</Button>
+            <Button 
+              sx={{
+                fontSize: {
+                  xs: '1.2rem',   // mobile
+                  sm: '1.3rem',   // tablet
+                  md: '1.3rem',       // desktop pequeno
+                  lg: '1.3rem'    // desktop grande
+                }
+              }}
+              variant="outlined" 
+              startIcon={<FaTasks />}
+            >
+              Create Task
+            </Button>
           </div>
           <h1 className='text-2xl'>Your can filter by Date Range</h1>
-          <div className="bg-gray-200 w-auto rounded-md my-2 p-2">
+          <div className="bg-gray-200 w-auto flex items-center justify-center rounded-md my-2 p-2">
             <Calendar onChange={setCurrentDateRange} value={currentDateRange} locale='en' />
           </div>
         </div>
-        <div className='lg:w-3/5 w-full'>
+        <div className='xl:w-4/5 md:w-2/3 lg:w-3/5 w-full'>
           {isLoading ? (
             <div className="flex w-full items-center justify-center min-h-[50vh]">Loading...</div>
           ) : (
