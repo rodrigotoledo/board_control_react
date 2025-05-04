@@ -35,9 +35,6 @@ export const CompletedAtStatus = ({ completed_at, onMarkCompleted }) => {
             variant="outlined"
             size="small"
           />
-          <Typography variant="caption" color="text.secondary" fontWeight={'bold'}>
-            Completed
-          </Typography>
         </>
       ) : (
         <Button

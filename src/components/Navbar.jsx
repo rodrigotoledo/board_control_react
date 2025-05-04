@@ -11,8 +11,9 @@ const Navbar = () => {
   return (
     <nav className="bg-gray-800 p-4 text-white fixed w-full top-0">
       <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="text-lg font-bold">
+        <Link to="/" className="text-lg font-bold flex items-center justify-center">
           <FaCheckDouble className="w-10 h-10 m-2" />
+          Board Control
         </Link>
         <div className="flex space-x-4">
           <Link to="/tasks" className="flex items-center space-x-2">

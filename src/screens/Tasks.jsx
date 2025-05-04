@@ -1,12 +1,15 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react';
 
-import { TextField } from '@mui/material';
+import { FaTasks } from 'react-icons/fa';
+import { Button, TextField } from '@mui/material';
 import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table';
+import Calendar from 'react-calendar';
 import { usePaginatedTasks } from '../hooks/usePaginatedTasks';
 import { useCompleteTask } from '../hooks/useCompleteTask';
 import { CompletedAtStatus, DateTimeFormat} from '../components/DateTimeUtils';
 
 const Tasks = () => {
+  const [currentDateRange, setCurrentDateRange] = useState([new Date()]);
   const [isSearching, setIsSearching] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortConfig, setSortConfig] = useState({
@@ -129,74 +132,86 @@ const Tasks = () => {
   if (isError) return <div className="p-4 text-red-500">Error loading tasks</div>;
 
   return (
-    <div className="w-full px-10 mt-8 space-y-4 h-fit">
+    <div className="w-full px-10 mt-8 space-y-4">
       <h2 className="text-2xl font-bold">Tasks List</h2>
-      <TextField
-        inputRef={searchInputRef}
-        className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring"
-        id="outlined-basic" label="Search for tasks..." variant="outlined" required={true} value={searchTerm} onChange={handleSearchChange} />
-      {isLoading ? (
-        <div className="flex w-full items-center justify-center min-h-[50vh]">Loading...</div>
-      ) : (
-        <div className="bg-white shadow rounded-lg">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              {table.getHeaderGroups().map(headerGroup => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map(header => (
-                    <th key={header.id} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      {flexRender(header.column.columnDef.header, header.getContext())}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            
-            <tbody className="bg-white divide-y divide-gray-200">
-              {table.getRowModel().rows.map(row => (
-                <tr key={row.id} className="hover:bg-gray-50">
-                  {row.getVisibleCells().map(cell => (
-                    <td key={cell.id} className="px-6 py-4 whitespace-nowrap text-sm">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          <div className="px-6 py-3 bg-gray-50 border-t border-gray-200 flex items-center justify-between">
-            <div>
-              <span className="text-sm text-gray-700">
-                Showing {paginatedData?.tasks.length || 0} of {paginatedData?.meta.total_count || 0} tasks
-              </span>
-            </div>
-            <div className="space-x-2">
-              <button
-                className={`px-3 py-1 border rounded-md text-sm ${
-                  page === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'
-                }`}
-                onClick={() => handlePageChange(page - 1)}
-                disabled={page === 1}
-              >
-                Previous
-              </button>
-              <span className="px-3 py-1 text-sm">
-                Page {page} of {paginatedData?.meta.total_pages || 1}
-              </span>
-              <button
-                className={`px-3 py-1 border rounded-md text-sm ${
-                  page >= (paginatedData?.meta.total_pages || 1) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'
-                }`}
-                onClick={() => handlePageChange(page + 1)}
-                disabled={page >= (paginatedData?.meta.total_pages || 1)}
-              >
-                Next
-              </button>
-            </div>
+      <div className='w-full flex flex-col lg:flex-row lg:space-x-4'>
+        <div className='lg:w-2/5 w-full flex flex-col space-y-2'>
+          <div className='flex space-x-2'>
+            <TextField
+              inputRef={searchInputRef}
+              id="outlined-basic" label="Search for tasks..." variant="outlined" required={true} value={searchTerm} onChange={handleSearchChange} />
+            <Button variant="outlined" startIcon={<FaTasks />}>Create Task</Button>
+          </div>
+          <h1 className='text-2xl'>Your can filter by Date Range</h1>
+          <div className="bg-gray-200 w-auto rounded-md my-2 p-2">
+            <Calendar onChange={setCurrentDateRange} value={currentDateRange} locale='en' />
           </div>
         </div>
-      )}
+        <div className='lg:w-3/5 w-full'>
+          {isLoading ? (
+            <div className="flex w-full items-center justify-center min-h-[50vh]">Loading...</div>
+          ) : (
+            <div className="bg-white shadow rounded-lg">
+              <table className="w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  {table.getHeaderGroups().map(headerGroup => (
+                    <tr key={headerGroup.id}>
+                      {headerGroup.headers.map(header => (
+                        <th key={header.id} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                        </th>
+                      ))}
+                    </tr>
+                  ))}
+                </thead>
+                
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {table.getRowModel().rows.map(row => (
+                    <tr key={row.id} className="hover:bg-gray-50">
+                      {row.getVisibleCells().map(cell => (
+                        <td key={cell.id} className="px-6 py-4 whitespace-nowrap text-sm">
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              <div className="px-6 py-3 bg-gray-50 border-t border-gray-200 flex items-center justify-between">
+                <div>
+                  <span className="text-sm text-gray-700">
+                    Showing {paginatedData?.tasks.length || 0} of {paginatedData?.meta.total_count || 0} tasks
+                  </span>
+                </div>
+                <div className="space-x-2">
+                  <button
+                    className={`px-3 py-1 border rounded-md text-sm ${
+                      page === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'
+                    }`}
+                    onClick={() => handlePageChange(page - 1)}
+                    disabled={page === 1}
+                  >
+                    Previous
+                  </button>
+                  <span className="px-3 py-1 text-sm">
+                    Page {page} of {paginatedData?.meta.total_pages || 1}
+                  </span>
+                  <button
+                    className={`px-3 py-1 border rounded-md text-sm ${
+                      page >= (paginatedData?.meta.total_pages || 1) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'
+                    }`}
+                    onClick={() => handlePageChange(page + 1)}
+                    disabled={page >= (paginatedData?.meta.total_pages || 1)}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
