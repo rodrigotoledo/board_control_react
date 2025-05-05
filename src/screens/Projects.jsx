@@ -1,20 +1,34 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react';
 
-import { TextField } from '@mui/material';
+import { FaBriefcase } from 'react-icons/fa';
+import { Button, TextField, Alert, Snackbar } from '@mui/material';
 import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table';
+import Calendar from 'react-calendar';
 import { usePaginatedProjects } from '../hooks/usePaginatedProjects';
 import { useCompleteProject } from '../hooks/useCompleteProject';
-import { CompletedAtStatus} from '../components/DateTimeUtils';
+import { CompletedAtStatus, DateTimeFormat} from '../components/DateTimeUtils';
 
 const Projects = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortConfig, setSortConfig] = useState({
-    field: 'name',
+    field: 'scheduled_at',
     direction: 'asc'
   });
   const [page, setPage] = useState(1);
   const searchInputRef = useRef(null);
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [openAlert, setOpenAlert] = useState(false);
+
+  const handleDayClick = (date) => {
+    setSelectedDate(date);
+    setOpenAlert(true);
+  };
+
+  const handleCloseAlert = () => {
+    setOpenAlert(false);
+  };
 
   const handleSearchChange = (e) => {
     setIsSearching(true);
@@ -31,7 +45,8 @@ const Projects = () => {
     page,
     sortConfig.field,
     sortConfig.direction,
-    searchTerm
+    searchTerm,
+    selectedDate
   );
 
   const { mutate: completeProject, isLoading: isCompleting } = useCompleteProject();
@@ -49,7 +64,7 @@ const Projects = () => {
         : 'asc';
     
     setSortConfig({ field, direction });
-    setPage(1); // Resetar para a primeira página ao ordenar
+    setPage(1);
   };
 
   const handlePageChange = (newPage) => {
@@ -93,6 +108,23 @@ const Projects = () => {
       ),
     },
     {
+      accessorKey: 'scheduled_at',
+      header: () => (
+        <button 
+          onClick={() => handleSort('scheduled_at')}
+          className="flex items-center"
+        >
+          Scheduled
+          {sortConfig.field === 'scheduled_at' && (
+            <span className="ml-1">
+              {sortConfig.direction === 'asc' ? '↑' : '↓'}
+            </span>
+          )}
+        </button>
+      ),
+      cell: (info) => <DateTimeFormat datetime={info.getValue()} />,
+    },
+    {
         accessorKey: 'completed_at',
         header: 'Status',
         cell: (info) => {
@@ -108,15 +140,42 @@ const Projects = () => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (isError) return <div className="p-4 text-red-500">Error loading projects</div>;
+  if (isError) return <div className="p-4 text-red-500">Error loading data</div>;
 
   return (
-    <div className="w-full px-10 mt-8 space-y-4 h-fit">
+    <div className="w-full px-10 mt-8 space-y-4">
       <h2 className="text-2xl font-bold">Projects List</h2>
-      <TextField
-        inputRef={searchInputRef}
-        className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring"
-        id="outlined-basic" label="Search for projects..." variant="outlined" required={true} value={searchTerm} onChange={handleSearchChange} />
+      <div className="flex flex-col md:flex-row w-full gap-4 lg:space-x-4">
+        <div className='w-full md:w-1/3 lg:w-1/4 flex flex-col space-y-4'>
+          <div className='flex flex-col space-y-2'>
+            <Button 
+              sx={{
+                fontSize: {
+                  xs: '1.2rem',
+                  sm: '1.3rem',
+                  md: '1.3rem',
+                  lg: '1.3rem'
+                }
+              }}
+              variant="outlined" 
+              startIcon={<FaBriefcase />}
+            >
+              Create Project
+            </Button>
+            <TextField
+              inputRef={searchInputRef}
+              id="outlined-basic" label="Search for projects..." variant="outlined" required={true} value={searchTerm} onChange={handleSearchChange} />
+          </div>
+          <h1 className='text-2xl'>Your can filter by Date</h1>
+          <div className="bg-gray-200 w-auto flex items-center justify-center rounded-md my-2 p-2">
+            <Calendar
+              onChange={setSelectedDate}
+              onClickDay={handleDayClick}
+              value={selectedDate}
+              locale='en' />
+          </div>
+        </div>
+      <div className='xl:w-4/5 md:w-2/3 lg:w-3/5 w-full'>
       {isLoading ? (
         <div className="flex w-full items-center justify-center min-h-[50vh]">Loading...</div>
       ) : (
@@ -179,7 +238,23 @@ const Projects = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
+    <Snackbar
+      open={openAlert}
+      autoHideDuration={3000}
+      onClose={handleCloseAlert}
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+    >
+      <Alert 
+        onClose={handleCloseAlert} 
+        severity="info"
+        sx={{ width: '100%' }}
+      >
+        You selected the day: {selectedDate?.toLocaleDateString('en')}
+      </Alert>
+    </Snackbar>
+  </div>   
   );
 };
 

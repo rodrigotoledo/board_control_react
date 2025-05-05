@@ -17,7 +17,7 @@ const Navbar = () => {
           <FaCheckDouble className="w-10 h-10 m-2" />
           Board Control
         </Link>
-        <div className="flex space-x-4">
+        <div className="flex space-x-4 items-center">
           <Link to="/tasks" className="flex items-center space-x-2">
             <FaTasks className="mr-2" />
             Tasks
