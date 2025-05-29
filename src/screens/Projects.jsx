@@ -12,8 +12,8 @@ const Projects = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortConfig, setSortConfig] = useState({
-    field: 'scheduled_at',
-    direction: 'asc'
+    field: 'id',
+    direction: 'desc'
   });
   const [page, setPage] = useState(1);
   const searchInputRef = useRef(null);
